@@ -1,0 +1,407 @@
+INCLUDE Irvine32.inc
+
+.data
+
+; First PAGE
+
+space1 BYTE "                                                               ",0ah,0
+tittle BYTE 0ah,"PROJECT NAME : Currency Converter",0ah,0
+teacher BYTE 0ah,"TEACHER NAME : DR TAHA",0ah,0
+subject BYTE "COURSE NAME  : Computer Organization And Assembly Language",0ah,0
+groupmember BYTE 0ah,"GROUP MEMBERS:",0ah,0ah,"	Shahreyar Asif - 10761",0ah,"	Shabbir        - 10768",0ah,"	Aafra          - 10784",0ah,0ah,0
+space BYTE 0ah,0ah,0ah,0ah,0ah,0ah,"            Press Enter To Continue",0
+
+num real4 ?
+
+;DOLLARCONVARSIONRATES
+
+dollorp dword 153
+dollorpound real4 0.72
+canddlr real4 1.26
+
+;POUNDCONVERSIONS
+poundpkr dword 212
+pounddllr real4 1.38
+pndcand real4 1.74
+
+;RupeeConversions
+rupeedlr real4 0.0066
+rupeepnd real4 0.0047
+rupeecan real4 0.0082
+
+;CandianConversions
+candldlr real4 0.80
+candlpnd real4 0.58
+candlrupe real4 121.83 
+
+;First PAge End
+
+
+;Second Page Start
+start BYTE "Select first Currency ",0ah,"1 Dollor",0ah,"2 Pound",0ah,"3 Rupee",0ah,"4 Canadian Dollar",0ah,0
+
+dollor Byte "Convert Your Dollar into ",0ah,"1 PKR",0ah,"2 Pound",0ah,"3 Canadian Dollar",0ah,0
+pound Byte "Convert Your pound into ",0ah,"1 PKR",0ah,"2 dollar",0ah,"3 Canadian Dollar",0ah,0
+pkr Byte "Convert Your pkr into ",0ah,"1 Dollar",0ah,"2 Pound",0ah,"3 Canadian Dollar",0ah,0
+canadian Byte "Convert Your Canadian Dollar into ",0ah,"1 Dollar",0ah,"2 Pound",0ah,"3 Pkr",0ah,0
+
+amount Byte "Enter Amount ",0ah,0
+youramount Byte "Your Converted Amount is ",0
+
+
+
+.code
+ main PROC
+ call Clrscr
+
+
+;First PAGE PROCESS
+	MOV EAX,white+ red*16 
+    mov edx, OFFSET space1
+	call SetTextColor
+    call WriteString
+
+    MOV EAX,red
+    mov edx, OFFSET subject
+	call SetTextColor
+    call WriteString
+
+	MOV EAX, red*3
+    mov edx, OFFSET teacher
+	call SetTextColor
+    call WriteString
+
+	mov edx, OFFSET tittle
+    call WriteString
+	mov edx, OFFSET groupmember
+    call WriteString
+
+
+	 MOV EAX,white+ red*16 
+    mov edx, OFFSET space1
+	call SetTextColor
+    call WriteString
+
+
+	MOV EAX, yellow
+	mov edx, OFFSET space
+	call SetTextColor
+    call WriteString
+    call readint
+    call Clrscr
+	call Crlf
+	
+ ;First PAGE PROCESS END
+
+ ; Second PAGE PROCESS START
+	 mov EAX,yellow
+    mov edx, OFFSET start
+	call SetTextColor
+    call WriteString
+	
+	
+	call readint
+
+	mov  num,eax
+	cmp eax,1
+	JE L1 ;JUMPFORDOLLAR
+
+	cmp eax,2
+	JE X1 ;JUMPFORPOUND
+
+	cmp eax,3
+	JE Y1 ;JUMPFORRupee
+	
+
+	cmp eax,4
+	JE Z1 ;JUMPFORCandianDollar
+	exit
+
+	;DOLLAR AREA
+L1:
+
+   call Clrscr
+	call Crlf
+	 mov EAX,white
+    mov edx, OFFSET dollor
+	call SetTextColor
+    call WriteString
+	call readint
+
+	mov num,eax
+	cmp eax,1
+	JE LL1
+
+	cmp eax,2
+	JE LL2
+
+	cmp eax,3
+	JE LL3
+
+	exit
+
+LL1:
+	 mov EAX,white
+    mov edx, OFFSET amount
+	call SetTextColor
+    call WriteString
+	call readdec
+	mov num,eax
+	
+	imul eax,dollorp
+	mov edx,OFFSet youramount
+	call WriteString
+	call writedec
+
+	call readint
+	exit
+
+LL2:
+	
+    mov edx, OFFSET amount
+	call SetTextColor
+    call WriteString
+	call readfloat
+	fstp num
+	fld  num
+	fmul dollorpound
+	mov edx,OFFSet youramount
+	call WriteString
+	call writefloat
+	call readint
+	exit
+LL3:
+	
+    mov edx, OFFSET amount
+	call SetTextColor
+    call WriteString
+	call readfloat
+	fstp num
+	fld  num
+	fmul canddlr
+	mov edx,OFFSet youramount
+	call WriteString
+	call writefloat
+	call readint
+	exit
+
+
+	
+	exit
+
+
+;POUNDAREA
+
+X1:
+
+   call Clrscr
+	call Crlf
+	 mov EAX,white
+    mov edx, OFFSET pound
+	call SetTextColor
+    call WriteString
+	call readint
+
+	mov num,eax
+	cmp eax,1
+	JE XX1
+
+	cmp eax,2
+	JE XX2
+
+	cmp eax,3
+	JE XX3
+
+	exit
+
+XX1:
+	 mov EAX,white
+    mov edx, OFFSET amount
+	call SetTextColor
+    call WriteString
+	
+	mov num,eax
+	call readdec
+	imul eax,poundpkr
+	mov edx,OFFSet youramount
+	call WriteString
+	call writedec
+
+	call readint
+	exit
+
+XX2:
+	mov edx, OFFSET amount
+	call SetTextColor
+    call WriteString
+	call readfloat
+	fstp num
+	fld  num
+	fmul pounddllr
+	mov edx,OFFSet youramount
+	call WriteString
+	call writefloat
+
+	call readint
+	exit
+XX3:
+	mov edx, OFFSET amount
+	call SetTextColor
+    call WriteString
+	call readfloat
+	fstp num
+	fld  num
+	fmul pndcand
+	mov edx,OFFSet youramount
+	call WriteString
+	call writefloat
+
+	call readint
+	exit
+
+
+;RupeeArea
+
+Y1:
+
+
+   call Clrscr
+	call Crlf
+	 mov EAX,white
+    mov edx, OFFSET pkr
+	call SetTextColor
+    call WriteString
+	call readint
+
+	mov num,eax
+	cmp eax,1
+	JE YY1
+
+	cmp eax,2
+	JE YY2
+
+	cmp eax,3
+	JE YY3
+
+	exit
+
+YY1:
+	mov eax,yellow
+	mov edx, OFFSET amount
+	call SetTextColor
+    call WriteString
+	call readfloat
+	fstp num
+	fld  num
+	fmul rupeedlr
+	mov edx,OFFSet youramount
+	call WriteString
+	call writefloat
+
+	call readint
+	exit
+
+YY2:
+	 mov edx, OFFSET amount
+	call SetTextColor
+    call WriteString
+	call readfloat
+	fstp num
+	fld  num
+	fmul rupeepnd
+	mov edx,OFFSet youramount
+	call WriteString
+	call writefloat
+
+	call readint
+	exit
+YY3:
+    mov eax,green
+	 mov edx, OFFSET amount
+	call SetTextColor
+    call WriteString
+	call readfloat
+	fstp num
+	fld  num
+	fmul rupeecan
+	mov edx,OFFSet youramount
+	call WriteString
+	call writefloat
+
+	call readint
+	exit
+
+;CanadianDollarArea
+Z1:
+
+   call Clrscr
+	call Crlf
+	 mov EAX,white
+    mov edx, OFFSET canadian
+	call SetTextColor
+    call WriteString
+	call readint
+
+	mov num,eax
+	cmp eax,1
+	JE ZZ1
+
+	cmp eax,2
+	JE ZZ2
+
+	cmp eax,3
+	JE ZZ3
+
+	exit
+
+ZZ1:
+	 mov EAX,white
+    mov edx, OFFSET amount
+	call SetTextColor
+    call WriteString
+	
+	mov num,eax
+	call readdec
+	imul eax,candldlr
+	mov edx,OFFSet youramount
+	call WriteString
+	call writedec
+
+	call readint
+	exit
+
+ZZ2:
+	mov edx, OFFSET amount
+	call SetTextColor
+    call WriteString
+	call readfloat
+	fstp num
+	fld  num
+	fmul candlpnd
+	mov edx,OFFSet youramount
+	call WriteString
+	call writefloat
+
+	call readint
+	exit
+ZZ3:
+	mov edx, OFFSET amount
+	call SetTextColor
+    call WriteString
+	call readfloat
+	fstp num
+	fld  num
+	fmul candlrupe
+	mov edx,OFFSet youramount
+	call WriteString
+	call writefloat
+
+	call readint
+	exit
+
+	main ENDP
+	END main 
+
+
+
+
